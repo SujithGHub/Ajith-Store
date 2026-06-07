@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ajith-store-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ajith_store
+      POSTGRES_USER: ajith_user
+      POSTGRES_PASSWORD: ajith_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - ajith-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ajith_user -d ajith_store"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ajith-store-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ajith_store
+      DB_USER: ajith_user
+      DB_PASS: ajith_pass
+      JWT_SECRET: ${JWT_SECRET:-change-this-secret-in-production}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ajith-uploads:/var/ajith-store
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ajith-store-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8080
+
+volumes:
+  ajith-db-data:
+  ajith-uploads:

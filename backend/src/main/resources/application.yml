@@ -1,0 +1,65 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ajith-store
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ajith_store}
+    username: ${DB_USER:ajith_user}
+    password: ${DB_PASS:ajith_pass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Kolkata
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:aGVsbG9Baml0aFN0b3JlVGhpc0lzQVZlcnlMb25nU2VjcmV0S2V5Rm9ySldU
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000
+
+# File upload paths
+app:
+  upload-path: ${UPLOAD_PATH:/var/ajith-store/uploads}
+  logo-path: ${LOGO_PATH:/var/ajith-store/logos}
+  barcode-path: ${BARCODE_PATH:/var/ajith-store/barcodes}
+
+logging:
+  level:
+    com.ajith.store: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN

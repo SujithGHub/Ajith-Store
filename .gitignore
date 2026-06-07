@@ -1,0 +1,28 @@
+# Java
+*.class
+*.jar
+*.war
+.gradle/
+build/
+
+# Node
+node_modules/
+dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+
+# Uploads
+uploads/
+logos/
+barcodes/
