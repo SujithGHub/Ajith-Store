@@ -1,11 +1,24 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent } from '@/components/ui/card'
-import { Store, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Store, Eye, EyeOff, Loader2, Package, FileText, BarChart3, Truck } from 'lucide-react'
+
+const features = [
+  { icon: Package, label: 'Inventory Management' },
+  { icon: FileText, label: 'GST Billing' },
+  { icon: Truck, label: 'Purchase Management' },
+  { icon: BarChart3, label: 'Sales Analytics' },
+]
+
+const demoAccounts = [
+  { role: 'Admin', user: 'admin', pass: 'admin123' },
+  { role: 'Manager', user: 'manager', pass: 'admin123' },
+  { role: 'Cashier', user: 'cashier', pass: 'admin123' },
+]
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
@@ -29,67 +42,136 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen">
       {/* Left — Brand showcase */}
-      <div className="hidden lg:flex lg:w-1/2 bg-zinc-950 relative overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="hidden lg:flex lg:w-1/2 bg-zinc-950 relative overflow-hidden"
+      >
         <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800" />
-        <div className="absolute inset-0 opacity-[0.03]"
+        <div
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `radial-gradient(circle at 25px 25px, white 1px, transparent 0)`,
-            backgroundSize: '50px 50px'
+            backgroundSize: '50px 50px',
           }}
         />
+        <div className="absolute top-1/4 -left-20 h-96 w-96 rounded-full bg-white/5 blur-3xl" />
+        <div className="absolute bottom-1/4 -right-20 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
+
         <div className="relative flex flex-col justify-between p-16 w-full">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex items-center gap-3"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm">
               <Store className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-semibold text-white">Ajith Store</span>
-          </div>
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-              Textile retail,<br />simplified.
-            </h1>
-            <p className="max-w-md text-base text-zinc-400 leading-relaxed">
-              Complete clothing store management — inventory, billing, purchases, 
-              customers, and reports. Built for speed and ease of use.
-            </p>
-            <div className="flex gap-6 pt-4">
-              {['Stock', 'Billing', 'Reports'].map((item) => (
-                <div key={item} className="flex items-center gap-2 text-sm text-zinc-500">
-                  <div className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
-                  {item}
+          </motion.div>
+
+          <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="space-y-4"
+            >
+              <h1 className="text-5xl font-bold tracking-tight text-white">
+                Textile retail,<br />
+                <span className="text-zinc-400">simplified.</span>
+              </h1>
+              <p className="max-w-md text-base text-zinc-400 leading-relaxed">
+                Complete clothing store management with inventory, billing, purchases,
+                customers, GST, and analytics — all in one place.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="flex flex-wrap gap-3"
+            >
+              {features.map((f) => (
+                <div
+                  key={f.label}
+                  className="flex items-center gap-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 px-4 py-2 text-sm text-zinc-300"
+                >
+                  <f.icon className="h-3.5 w-3.5" />
+                  {f.label}
                 </div>
               ))}
-            </div>
+            </motion.div>
           </div>
-          <p className="text-sm text-zinc-600">
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="text-sm text-zinc-700"
+          >
             &copy; 2026 Ajith Store. All rights reserved.
-          </p>
+          </motion.p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Right — Login form */}
-      <div className="flex flex-1 items-center justify-center bg-white p-8">
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="flex flex-1 items-center justify-center bg-white p-8"
+      >
         <div className="w-full max-w-sm space-y-8">
           {/* Mobile logo */}
-          <div className="flex items-center justify-center gap-2 lg:hidden">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center justify-center gap-2 lg:hidden"
+          >
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950">
               <Store className="h-5 w-5 text-white" />
             </div>
             <span className="text-lg font-semibold">Ajith Store</span>
-          </div>
+          </motion.div>
 
-          <div className="space-y-2 text-center lg:text-left">
-            <h2 className="text-2xl font-semibold tracking-tight">Welcome back</h2>
-            <p className="text-sm text-muted-foreground">
+          <div className="space-y-2">
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-2xl font-semibold tracking-tight"
+            >
+              Welcome back
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+              className="text-sm text-muted-foreground"
+            >
               Sign in to your account to continue
-            </p>
+            </motion.p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <motion.form
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            onSubmit={handleSubmit}
+            className="space-y-5"
+          >
             {error && (
-              <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 border border-red-200">
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 border border-red-200"
+              >
                 {error}
-              </div>
+              </motion.div>
             )}
 
             <div className="space-y-2">
@@ -100,7 +182,7 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter your username"
-                className="h-11"
+                className="h-11 transition-all focus:ring-2 focus:ring-foreground"
                 required
                 autoFocus
               />
@@ -123,7 +205,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="h-11 pr-10"
+                  className="h-11 pr-10 transition-all focus:ring-2 focus:ring-foreground"
                   required
                 />
                 <button
@@ -136,7 +218,12 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <Button type="submit" disabled={isLoading} className="w-full h-11 text-base" size="lg">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full h-11 text-base transition-all"
+              size="lg"
+            >
               {isLoading ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -156,21 +243,25 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center text-xs">
-              {[
-                { role: 'Admin', user: 'admin', pass: 'admin123' },
-                { role: 'Manager', user: 'manager', pass: 'admin123' },
-                { role: 'Cashier', user: 'cashier', pass: 'admin123' },
-              ].map((d) => (
-                <div key={d.role} className="rounded-lg border bg-muted/30 p-2 space-y-0.5">
-                  <p className="font-medium text-foreground">{d.role}</p>
-                  <p className="text-muted-foreground">{d.user}</p>
-                </div>
+            <div className="grid grid-cols-3 gap-2">
+              {demoAccounts.map((d) => (
+                <button
+                  key={d.role}
+                  type="button"
+                  onClick={() => {
+                    setUsername(d.user)
+                    setPassword(d.pass)
+                  }}
+                  className="rounded-lg border bg-muted/30 p-2.5 text-center transition-all hover:border-foreground/30 hover:bg-muted/50 space-y-0.5"
+                >
+                  <p className="text-xs font-semibold">{d.role}</p>
+                  <p className="text-xs text-muted-foreground font-mono">{d.user}</p>
+                </button>
               ))}
             </div>
-          </form>
+          </motion.form>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import { Toaster } from 'react-hot-toast'
 import MainLayout from './layouts/MainLayout'
 import AuthLayout from './layouts/AuthLayout'
@@ -15,26 +16,30 @@ import ReportsPage from './features/reports/ReportsPage'
 import SettingsPage from './features/settings/SettingsPage'
 
 function App() {
+  const location = useLocation()
+
   return (
     <>
-      <Routes>
-        <Route path="/auth" element={<AuthLayout />}>
-          <Route path="login" element={<LoginPage />} />
-        </Route>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="products/*" element={<ProductsPage />} />
-          <Route path="inventory/*" element={<InventoryPage />} />
-          <Route path="suppliers/*" element={<SuppliersPage />} />
-          <Route path="purchases/*" element={<PurchasesPage />} />
-          <Route path="customers/*" element={<CustomersPage />} />
-          <Route path="sales" element={<SalesPage />} />
-          <Route path="billing" element={<BillingPage />} />
-          <Route path="reports/*" element={<ReportsPage />} />
-          <Route path="settings/*" element={<SettingsPage />} />
-        </Route>
-      </Routes>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/auth" element={<AuthLayout />}>
+            <Route path="login" element={<LoginPage />} />
+          </Route>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="products/*" element={<ProductsPage />} />
+            <Route path="inventory/*" element={<InventoryPage />} />
+            <Route path="suppliers/*" element={<SuppliersPage />} />
+            <Route path="purchases/*" element={<PurchasesPage />} />
+            <Route path="customers/*" element={<CustomersPage />} />
+            <Route path="sales" element={<SalesPage />} />
+            <Route path="billing" element={<BillingPage />} />
+            <Route path="reports/*" element={<ReportsPage />} />
+            <Route path="settings/*" element={<SettingsPage />} />
+          </Route>
+        </Routes>
+      </AnimatePresence>
       <Toaster position="top-right" />
     </>
   )
