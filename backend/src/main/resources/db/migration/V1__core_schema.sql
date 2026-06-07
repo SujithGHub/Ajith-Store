@@ -1,8 +1,6 @@
 -- Ajith Store - Core Schema
 -- V1: Store config, users, roles, permissions, audit logs
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 -- ============================================================
 -- STORE CONFIGURATION
 -- ============================================================
