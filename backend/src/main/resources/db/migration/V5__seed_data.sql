@@ -19,34 +19,10 @@ VALUES (
 -- Password hash for BCrypt
 -- ============================================================
 INSERT INTO users (store_id, username, password_hash, full_name, role, enabled)
-VALUES (
-    1,
-    'admin',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
-    'Administrator',
-    'ADMIN',
-    TRUE
-);
-
-INSERT INTO users (store_id, username, password_hash, full_name, role, enabled)
-VALUES (
-    1,
-    'manager',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
-    'Manager',
-    'MANAGER',
-    TRUE
-);
-
-INSERT INTO users (store_id, username, password_hash, full_name, role, enabled)
-VALUES (
-    1,
-    'cashier',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
-    'Cashier',
-    'CASHIER',
-    TRUE
-);
+VALUES
+(1, 'admin',   '$2a$10$JX/B9/nf3XOdEt5oBc1fmuanJrfHiewZQfk5sU3TNW3gCM7/hKFYe', 'Administrator', 'ADMIN',   TRUE),
+(1, 'manager', '$2a$10$JX/B9/nf3XOdEt5oBc1fmuanJrfHiewZQfk5sU3TNW3gCM7/hKFYe', 'Manager',       'MANAGER', TRUE),
+(1, 'cashier', '$2a$10$JX/B9/nf3XOdEt5oBc1fmuanJrfHiewZQfk5sU3TNW3gCM7/hKFYe', 'Cashier',       'CASHIER', TRUE);
 
 -- ============================================================
 -- ROLE PERMISSIONS
