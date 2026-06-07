@@ -32,15 +32,17 @@
 │                         PRODUCTS                                   │
 │  id (PK) │ item_code │ name │ description                          │
 │  category_id (FK) │ brand_id (FK) │ manufacturer_id (FK)            │
-│  fabric │ pattern │ gender │ hsn_code │ gst%                       │
+│  fabric_id (FK) │ pattern_id (FK) │ tax_group_id (FK)               │
+│  gender │ age_group │ hsn_code │ gst_applicable                    │
 └───────────────────────┬────────────────────────────────────────────┘
                         │ 1
                         │ has variants
                         │ N
 ┌────────────────────────────────────────────────────────────────────┐
 │                     PRODUCT_VARIANTS                               │
-│  id (PK) │ product_id (FK) │ color │ size │ barcode (UQ) │ sku     │
-│  purchase_price │ landing_cost │ mrp │ selling_price │ stock        │
+│  id (PK) │ product_id (FK) │ color_id (FK) │ size_id (FK)          │
+│  barcode (UQ) │ sku │ purchase_price │ landing_cost │ mrp          │
+│  selling_price │ wholesale_price │ opening_stock │ current_stock    │
 │  min_stock │ reorder_level │ status                                 │
 └──────┬───────────────┬────────────────┬────────────────────────────┘
        │ 1             │ 1              │ 1
@@ -104,6 +106,22 @@
 └────────────────────────────────────────────────────────────────────┘
 
 ┌────────────────────────────────────────────────────────────────────┐
+│                         COLORS                   SIZES             │
+│  id (PK) │ name │ hex_code │ status   │  id (PK) │ name │ order    │
+└──────────────────────────────────────┴─────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│                         FABRICS                 PATTERNS            │
+│  id (PK) │ name │ desc │ status   │  id (PK) │ name │ desc        │
+└──────────────────────────────────────┴─────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│                         TAX_GROUPS                                 │
+│  id (PK) │ name │ cgst │ sgst │ igst │ status                      │
+└────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│                     EXPENSE_CATEGORIES                             │
+│  id (PK) │ name │ description │ status                              │
+└────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
 │                         COUPONS                                    │
 │  id (PK) │ code (UQ) │ type │ value │ min_purchase │ max_discount   │
 │  usage_limit │ valid_from │ valid_to │ status                       │
@@ -136,6 +154,19 @@ ProductVariant 1─N PurchaseReturnItems
 ProductVariant 1─N SaleItems
 ProductVariant 1─N SalesReturnItems
 ProductVariant 1─N StockAdjustmentItems
+ProductVariant 1─N StockLedger        (mandatory - every movement)
+ProductVariant 1─N PriceChangeHistory
+ProductVariant 1─N DraftSaleItems
+
+Product 1────────N ProductImages
+
+Color 1──────────N ProductVariants
+Size 1───────────N ProductVariants
+Fabric 1─────────N Products
+Pattern 1────────N Products
+TaxGroup 1───────N Products
+
+ExpenseCategory 1─N Expenses
 
 Supplier 1──────N PurchaseOrders
 Supplier 1──────N PurchaseInvoices
@@ -150,7 +181,11 @@ Customer 1──────N Sales
 Customer 1──────N CustomerTransactions
 
 Sale 1──────────N SaleItems
-Sale 1──────────N Payments
+Sale 1──────────N Payments          (split payments - cash/upi/card/credit)
 Sale 1──────────N SalesReturns
+Sale 1──────────0..1 DraftSales     (when resuming from hold)
+
+Customer 1──────N LoyaltyTransactions
+Customer 1──────N Notifications
 
 Role 1──────────N RolePermissions

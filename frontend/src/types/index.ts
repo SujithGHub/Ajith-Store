@@ -38,10 +38,70 @@ export interface Category {
   id: number
   name: string
   description: string
-  parentId: number
+  parentId: number | null
+  parentName?: string
   imagePath: string
   sortOrder: number
   status: string
+}
+
+export interface Brand {
+  id: number
+  name: string
+  description: string
+  imagePath: string
+  status: string
+}
+
+export interface Color {
+  id: number
+  name: string
+  hexCode: string
+  status: string
+}
+
+export interface Size {
+  id: number
+  name: string
+  displayOrder: number
+  status: string
+}
+
+export interface Fabric {
+  id: number
+  name: string
+  description: string
+  status: string
+}
+
+export interface Pattern {
+  id: number
+  name: string
+  description: string
+  status: string
+}
+
+export interface TaxGroup {
+  id: number
+  name: string
+  cgstPct: number
+  sgstPct: number
+  igstPct: number
+  status: string
+}
+
+export interface ExpenseCategory {
+  id: number
+  name: string
+  description: string
+  status: string
+}
+
+export interface ProductImage {
+  id: number
+  productId: number
+  imageUrl: string
+  displayOrder: number
 }
 
 export interface Product {
@@ -51,17 +111,28 @@ export interface Product {
   description: string
   categoryId: number
   categoryName: string
+  subcategoryId: number
+  subcategoryName: string
   brandId: number
   brandName: string
-  fabric: string
-  pattern: string
+  manufacturerId: number
+  manufacturerName: string
+  unit: string
+  fabricId: number
+  fabricName: string
+  patternId: number
+  patternName: string
   gender: string
+  ageGroup: string
   hsnCode: string
   gstApplicable: boolean
+  taxGroupId: number
+  taxGroupName: string
   cgstPct: number
   sgstPct: number
   igstPct: number
   imagePath: string
+  images: ProductImage[]
   status: string
   variants: ProductVariant[]
 }
@@ -69,8 +140,12 @@ export interface Product {
 export interface ProductVariant {
   id: number
   productId: number
-  color: string
-  size: string
+  productName: string
+  colorId: number
+  colorName: string
+  colorHex: string
+  sizeId: number
+  sizeName: string
   barcode: string
   sku: string
   purchasePrice: number
@@ -93,8 +168,39 @@ export interface Supplier {
   address: string
   gstNumber: string
   creditTerms: string
+  openingBalance: number
   currentBalance: number
   status: string
+}
+
+export interface PurchaseOrder {
+  id: number
+  orderNumber: string
+  supplierId: number
+  supplierName: string
+  orderDate: string
+  expectedDelivery: string
+  status: string
+  subtotal: number
+  discountAmount: number
+  taxAmount: number
+  totalAmount: number
+  notes: string
+  items: PurchaseOrderItem[]
+}
+
+export interface PurchaseOrderItem {
+  id: number
+  variantId: number
+  barcode: string
+  productName: string
+  color: string
+  size: string
+  quantity: number
+  unitPrice: number
+  discountAmount: number
+  taxAmount: number
+  totalPrice: number
 }
 
 export interface Customer {
@@ -106,6 +212,7 @@ export interface Customer {
   address: string
   gstNumber: string
   creditLimit: number
+  openingBalance: number
   currentBalance: number
   loyaltyPoints: number
   membershipLevel: string
@@ -125,6 +232,16 @@ export interface SaleItem {
   totalPrice: number
 }
 
+export interface Payment {
+  id: number
+  saleId: number
+  paymentMode: 'CASH' | 'UPI' | 'CARD' | 'CREDIT'
+  amount: number
+  referenceNumber: string
+  paymentDate: string
+  notes: string
+}
+
 export interface Sale {
   id: number
   invoiceNumber: string
@@ -137,8 +254,131 @@ export interface Sale {
   totalAmount: number
   paidAmount: number
   balanceAmount: number
+  roundOff: number
+  couponCode: string
+  couponDiscount: number
   paymentStatus: string
+  notes: string
   items: SaleItem[]
+  payments: Payment[]
+  createdBy: number
+  createdByName: string
+}
+
+export interface DraftSale {
+  id: number
+  draftNumber: string
+  customerId: number
+  customerName: string
+  notes: string
+  status: string
+  items: DraftSaleItem[]
+  createdBy: number
+  createdAt: string
+}
+
+export interface DraftSaleItem {
+  id: number
+  variantId: number
+  barcode: string
+  productName: string
+  color: string
+  size: string
+  quantity: number
+  unitPrice: number
+  discountAmount: number
+}
+
+export interface StockLedgerEntry {
+  id: number
+  variantId: number
+  transactionType: string
+  referenceType: string
+  referenceId: number
+  qtyIn: number
+  qtyOut: number
+  runningBalance: number
+  createdBy: number
+  createdAt: string
+}
+
+export interface Expense {
+  id: number
+  expenseNumber: string
+  expenseCategoryId: number
+  expenseCategoryName: string
+  amount: number
+  description: string
+  expenseDate: string
+  paymentMode: string
+  notes: string
+  createdBy: number
+}
+
+export interface DayClosing {
+  id: number
+  closingDate: string
+  openingCash: number
+  cashSales: number
+  upiSales: number
+  cardSales: number
+  creditSales: number
+  totalSales: number
+  expensesTotal: number
+  closingCash: number
+  expectedCash: number
+  difference: number
+  notes: string
+  closedBy: number
+  closedAt: string
+}
+
+export interface Notification {
+  id: number
+  type: string
+  title: string
+  message: string
+  referenceType: string
+  referenceId: number
+  isRead: boolean
+  createdAt: string
+}
+
+export interface LoyaltyTransaction {
+  id: number
+  customerId: number
+  transactionType: string
+  points: number
+  referenceType: string
+  referenceId: number
+  notes: string
+  createdAt: string
+}
+
+export interface DashboardStats {
+  todaySales: number
+  monthlySales: number
+  yearlySales: number
+  currentStockValue: number
+  outstandingCredits: number
+  lowStockCount: number
+  totalCustomers: number
+  totalSuppliers: number
+}
+
+export interface PriceChangeHistory {
+  id: number
+  variantId: number
+  oldPurchasePrice: number
+  newPurchasePrice: number
+  oldSellingPrice: number
+  newSellingPrice: number
+  oldMrp: number
+  newMrp: number
+  changedBy: number
+  changedByName: string
+  reason: string
+  changedAt: string
 }
 
 export interface PaginatedResponse<T> {

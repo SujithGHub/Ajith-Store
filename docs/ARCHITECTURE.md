@@ -107,14 +107,19 @@ src/
 ├── components/         → Shared UI components
 ├── features/           → Feature modules
 │   ├── auth/           → Login, register
-│   ├── products/       → Product management
-│   ├── inventory/      → Stock management
-│   ├── suppliers/      → Supplier management
-│   ├── purchases/      → Purchase management
-│   ├── customers/      → Customer management
-│   ├── sales/          → Billing & sales
-│   ├── reports/        → Reports module
-│   └── settings/       → Store settings
+│   ├── dashboard/      → KPI cards, charts, notifications
+│   ├── products/       → Product master, variants, categories, brands
+│   ├── inventory/      → Stock ledger, adjustments, barcode labels
+│   ├── suppliers/      → Supplier master, ledger
+│   ├── purchases/      → Purchase orders, GRN, invoices, returns
+│   ├── customers/      → Customer master, ledger, loyalty
+│   ├── sales/          → Billing (POS), draft/hold bills, returns
+│   ├── payments/       → Split payments (cash, UPI, card, credit)
+│   ├── expenses/       → Expense entry, categories
+│   ├── day-closing/    → Daily closing, cash reconciliation
+│   ├── reports/        → All reports (sales, purchase, inventory, financial)
+│   ├── settings/       → Store config, users, roles, tax groups
+│   └── notifications/  → Low stock, pending payments, alerts
 ├── hooks/              → Custom React hooks
 ├── lib/                → API client, utilities
 ├── layouts/            → Page layouts

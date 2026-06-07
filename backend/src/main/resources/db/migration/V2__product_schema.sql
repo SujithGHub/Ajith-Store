@@ -1,5 +1,5 @@
 -- Ajith Store - Product & Inventory Schema
--- V2: Categories, brands, manufacturers, products, variants
+-- V2: Categories, brands, manufacturers, products, variants, master tables
 
 -- ============================================================
 -- CATEGORIES
@@ -48,6 +48,68 @@ CREATE TABLE manufacturers (
 );
 
 -- ============================================================
+-- COLORS
+-- ============================================================
+CREATE TABLE colors (
+    id              BIGSERIAL PRIMARY KEY,
+    name            VARCHAR(100) NOT NULL,
+    hex_code        VARCHAR(7),
+    status          VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
+-- SIZES
+-- ============================================================
+CREATE TABLE sizes (
+    id              BIGSERIAL PRIMARY KEY,
+    name            VARCHAR(50) NOT NULL,
+    display_order   INT NOT NULL DEFAULT 0,
+    status          VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
+-- FABRICS
+-- ============================================================
+CREATE TABLE fabrics (
+    id              BIGSERIAL PRIMARY KEY,
+    name            VARCHAR(255) NOT NULL,
+    description     TEXT,
+    status          VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
+-- PATTERNS
+-- ============================================================
+CREATE TABLE patterns (
+    id              BIGSERIAL PRIMARY KEY,
+    name            VARCHAR(255) NOT NULL,
+    description     TEXT,
+    status          VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
+-- TAX GROUPS
+-- ============================================================
+CREATE TABLE tax_groups (
+    id              BIGSERIAL PRIMARY KEY,
+    name            VARCHAR(100) NOT NULL,
+    cgst_pct        DECIMAL(5,2) NOT NULL DEFAULT 0,
+    sgst_pct        DECIMAL(5,2) NOT NULL DEFAULT 0,
+    igst_pct        DECIMAL(5,2) NOT NULL DEFAULT 0,
+    status          VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
 -- PRODUCTS
 -- ============================================================
 CREATE TABLE products (
@@ -60,15 +122,13 @@ CREATE TABLE products (
     brand_id        BIGINT REFERENCES brands(id),
     manufacturer_id BIGINT REFERENCES manufacturers(id),
     unit            VARCHAR(50) NOT NULL DEFAULT 'PCS',
-    fabric          VARCHAR(255),
-    pattern         VARCHAR(255),
+    fabric_id       BIGINT REFERENCES fabrics(id),
+    pattern_id      BIGINT REFERENCES patterns(id),
     gender          VARCHAR(50),
     age_group       VARCHAR(100),
     hsn_code        VARCHAR(20),
     gst_applicable  BOOLEAN NOT NULL DEFAULT TRUE,
-    cgst_pct        DECIMAL(5,2) DEFAULT 0,
-    sgst_pct        DECIMAL(5,2) DEFAULT 0,
-    igst_pct        DECIMAL(5,2) DEFAULT 0,
+    tax_group_id    BIGINT REFERENCES tax_groups(id),
     image_path      VARCHAR(500),
     status          VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -80,6 +140,7 @@ CREATE INDEX idx_prod_brand ON products(brand_id);
 CREATE INDEX idx_prod_status ON products(status);
 CREATE INDEX idx_prod_name ON products(name);
 CREATE INDEX idx_prod_item_code ON products(item_code);
+CREATE INDEX idx_prod_tax_group ON products(tax_group_id);
 
 -- ============================================================
 -- PRODUCT VARIANTS
@@ -87,8 +148,8 @@ CREATE INDEX idx_prod_item_code ON products(item_code);
 CREATE TABLE product_variants (
     id                BIGSERIAL PRIMARY KEY,
     product_id        BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-    color             VARCHAR(100),
-    size              VARCHAR(100),
+    color_id          BIGINT REFERENCES colors(id),
+    size_id           BIGINT REFERENCES sizes(id),
     barcode           VARCHAR(100) NOT NULL UNIQUE,
     sku               VARCHAR(100) NOT NULL UNIQUE,
     purchase_price    DECIMAL(12,2) NOT NULL DEFAULT 0,
@@ -110,3 +171,5 @@ CREATE INDEX idx_pv_product ON product_variants(product_id);
 CREATE INDEX idx_pv_barcode ON product_variants(barcode);
 CREATE INDEX idx_pv_sku ON product_variants(sku);
 CREATE INDEX idx_pv_stock ON product_variants(current_stock);
+CREATE INDEX idx_pv_color ON product_variants(color_id);
+CREATE INDEX idx_pv_size ON product_variants(size_id);
