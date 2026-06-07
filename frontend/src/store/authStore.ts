@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import api from '@/lib/api'
-import type { User, LoginRequest, LoginResponse } from '@/types'
+import type { User, LoginRequest } from '@/types'
 
 interface AuthState {
   user: User | null
@@ -8,7 +8,21 @@ interface AuthState {
   isLoading: boolean
   login: (data: LoginRequest) => Promise<void>
   logout: () => void
-  checkAuth: () => void
+  checkAuth: () => Promise<void>
+}
+
+interface ApiResponse<T> {
+  success: boolean
+  message: string
+  data: T
+}
+
+interface TokenData {
+  accessToken: string
+  refreshToken: string
+  tokenType: string
+  expiresIn: number
+  user: User
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -19,10 +33,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (data: LoginRequest) => {
     set({ isLoading: true })
     try {
-      const { data: response } = await api.post<LoginResponse>('/auth/login', data)
-      localStorage.setItem('access_token', response.accessToken)
-      localStorage.setItem('refresh_token', response.refreshToken)
-      set({ user: response.user, isAuthenticated: true })
+      const { data: response } = await api.post<ApiResponse<TokenData>>('/auth/login', data)
+      const { accessToken, refreshToken, user } = response.data
+      localStorage.setItem('access_token', accessToken)
+      localStorage.setItem('refresh_token', refreshToken)
+      set({ user, isAuthenticated: true })
     } finally {
       set({ isLoading: false })
     }
@@ -36,8 +51,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   checkAuth: async () => {
     try {
-      const { data } = await api.get<User>('/auth/me')
-      set({ user: data, isAuthenticated: true })
+      const { data: response } = await api.get<ApiResponse<User>>('/auth/me')
+      set({ user: response.data, isAuthenticated: true })
     } catch {
       set({ user: null, isAuthenticated: false })
     }

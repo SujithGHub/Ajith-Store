@@ -1,11 +1,14 @@
 export interface User {
   id: number
+  storeId: number
   username: string
   fullName: string
   email: string
   phone: string
   role: 'ADMIN' | 'MANAGER' | 'CASHIER' | 'BILLING'
   enabled: boolean
+  lastLoginAt: string | null
+  createdAt: string
 }
 
 export interface LoginRequest {

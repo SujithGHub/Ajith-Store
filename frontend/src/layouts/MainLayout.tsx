@@ -1,10 +1,15 @@
+import { useEffect } from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import Sidebar from './Sidebar'
 import Header from './Header'
 
 export default function MainLayout() {
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, isLoading, checkAuth } = useAuthStore()
+
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
 
   if (!isAuthenticated) {
     return <Navigate to="/auth/login" replace />
