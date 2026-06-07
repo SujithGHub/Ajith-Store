@@ -39,7 +39,8 @@ const notifications = [
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-8">
+    <div className="h-full overflow-y-auto p-6 lg:p-8">
+      <div className="space-y-8">
       <PageHeader
         title="Dashboard"
         description="Overview of your store performance"
@@ -171,6 +172,7 @@ export default function DashboardPage() {
           </Card>
         </div>
       </div>
+    </div>
     </div>
   )
 }

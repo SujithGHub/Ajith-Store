@@ -102,7 +102,7 @@ export default function BillingPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] gap-4 -m-6 lg:-m-8">
+    <div className="flex h-full gap-4">
       {/* Left - Product selection */}
       <div className="flex w-[400px] flex-col border-r bg-card p-4">
         <div className="space-y-3">
