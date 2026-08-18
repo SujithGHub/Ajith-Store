@@ -400,3 +400,22 @@ export interface PageRequest {
   sort?: string
   search?: string
 }
+
+export interface Role {
+  role: string
+  description: string
+  system: boolean
+  createdAt: string
+  userCount: number
+}
+
+export interface RolePermission {
+  id: number
+  role: string
+  module: string
+  feature: string
+  canCreate: boolean
+  canRead: boolean
+  canUpdate: boolean
+  canDelete: boolean
+}

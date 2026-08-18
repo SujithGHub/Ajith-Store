@@ -36,6 +36,7 @@ public class JwtTokenProvider {
             .claim("userId", userPrincipal.getId())
             .claim("role", userPrincipal.getRole())
             .claim("storeId", userPrincipal.getStoreId())
+            .claim("tokenType", "access")
             .issuedAt(now)
             .expiration(expiry)
             .signWith(secretKey)
@@ -57,6 +58,15 @@ public class JwtTokenProvider {
 
     public String getUsernameFromToken(String token) {
         return parseClaims(token).getSubject();
+    }
+
+    public boolean isRefreshToken(String token) {
+        try {
+            Claims claims = parseClaims(token);
+            return "refresh".equals(claims.get("tokenType", String.class));
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public boolean validateToken(String token) {

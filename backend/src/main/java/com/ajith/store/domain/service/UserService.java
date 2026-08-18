@@ -76,10 +76,14 @@ public class UserService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
+        StringBuilder details = new StringBuilder("Updated user: " + user.getUsername());
         if (request.getFullName() != null) user.setFullName(request.getFullName());
         if (request.getEmail() != null) user.setEmail(request.getEmail());
         if (request.getPhone() != null) user.setPhone(request.getPhone());
-        if (request.getRole() != null) user.setRole(request.getRole());
+        if (request.getRole() != null && !request.getRole().equals(user.getRole())) {
+            details.append(". Role changed from ").append(user.getRole()).append(" to ").append(request.getRole());
+            user.setRole(request.getRole());
+        }
         if (request.getEnabled() != null) user.setEnabled(request.getEnabled());
         user = userRepository.save(user);
 
@@ -89,7 +93,7 @@ public class UserService {
             .action("UPDATE_USER")
             .entityType("User")
             .entityId(user.getId())
-            .details("Updated user: " + user.getUsername())
+            .details(details.toString())
             .build());
 
         return userMapper.toDto(user);

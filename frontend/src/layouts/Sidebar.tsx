@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
+import { useAuthStore } from '@/store/authStore'
+import api from '@/lib/api'
 import {
   LayoutDashboard,
   Package,
@@ -7,6 +9,8 @@ import {
   Truck,
   ShoppingCart,
   Users,
+  UserCog,
+  Shield,
   FileText,
   BarChart3,
   Wallet,
@@ -14,26 +18,43 @@ import {
   ChevronLeft,
   ChevronRight,
   Store,
+  BookOpen,
 } from 'lucide-react'
 import { cn } from '@/utils'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
-const navItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/products', icon: Package, label: 'Products' },
-  { to: '/inventory', icon: PackageSearch, label: 'Inventory' },
-  { to: '/purchases', icon: ShoppingCart, label: 'Purchases' },
-  { to: '/suppliers', icon: Truck, label: 'Suppliers' },
-  { to: '/customers', icon: Users, label: 'Customers' },
-  { to: '/billing', icon: FileText, label: 'Billing' },
-  { to: '/expenses', icon: Wallet, label: 'Expenses' },
-  { to: '/reports', icon: BarChart3, label: 'Reports' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+const allNavItems = [
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['ADMIN', 'MANAGER', 'CASHIER', 'BILLING'] },
+  { to: '/products', icon: Package, label: 'Products', roles: ['ADMIN', 'MANAGER'] },
+  { to: '/inventory', icon: PackageSearch, label: 'Inventory', roles: ['ADMIN', 'MANAGER'] },
+  { to: '/masters', icon: BookOpen, label: 'Masters', roles: ['ADMIN', 'MANAGER'] },
+  { to: '/purchases', icon: ShoppingCart, label: 'Purchases', roles: ['ADMIN', 'MANAGER'] },
+  { to: '/suppliers', icon: Truck, label: 'Suppliers', roles: ['ADMIN', 'MANAGER'] },
+  { to: '/customers', icon: Users, label: 'Customers', roles: ['ADMIN', 'MANAGER', 'CASHIER', 'BILLING'] },
+  { to: '/users', icon: UserCog, label: 'Users', roles: ['ADMIN'] },
+  { to: '/roles', icon: Shield, label: 'Roles', roles: ['ADMIN'] },
+  { to: '/billing', icon: FileText, label: 'Billing', roles: ['ADMIN', 'MANAGER', 'CASHIER', 'BILLING'] },
+  { to: '/expenses', icon: Wallet, label: 'Expenses', roles: ['ADMIN', 'MANAGER'] },
+  { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['ADMIN', 'MANAGER'] },
+  { to: '/settings', icon: Settings, label: 'Settings', roles: ['ADMIN', 'MANAGER'] },
 ]
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const [storeName, setStoreName] = useState('Ajith Store')
+  const { user } = useAuthStore()
+
+  useEffect(() => {
+    api.get('/store-config').then(({ data }) => {
+      if (data.data?.storeName) setStoreName(data.data.storeName)
+    }).catch(() => {})
+  }, [])
+
+  const navItems = useMemo(() => {
+    if (!user) return []
+    return allNavItems.filter((item) => item.roles.includes(user.role))
+  }, [user])
 
   return (
     <aside
@@ -49,9 +70,9 @@ export default function Sidebar() {
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
           <Store className="h-4 w-4 text-primary-foreground" />
         </div>
-        {!collapsed && (
-          <span className="text-sm font-semibold tracking-tight">Ajith Store</span>
-        )}
+          {!collapsed && (
+            <span className="text-sm font-semibold tracking-tight">{storeName}</span>
+          )}
       </div>
 
       <nav className="flex-1 space-y-0.5 p-2 overflow-y-auto">

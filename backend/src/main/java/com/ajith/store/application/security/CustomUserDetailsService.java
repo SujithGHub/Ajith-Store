@@ -3,6 +3,7 @@ package com.ajith.store.application.security;
 import com.ajith.store.domain.model.User;
 import com.ajith.store.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,8 +19,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameAndEnabledTrue(username)
+        User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        if (!user.getEnabled()) {
+            throw new DisabledException("Account is disabled");
+        }
+
         return UserPrincipal.create(user);
     }
 

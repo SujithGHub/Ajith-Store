@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -34,8 +35,15 @@ export default function LoginPage() {
     try {
       await login({ username, password })
       navigate('/dashboard')
-    } catch {
-      setError('Invalid username or password')
+    } catch (err: any) {
+      const message = err.response?.data?.message
+      if (message?.toLowerCase().includes('disabled')) {
+        setError('This account has been disabled. Contact your administrator.')
+      } else if (message?.toLowerCase().includes('locked')) {
+        setError('Account is locked due to too many failed attempts. Try again later.')
+      } else {
+        setError(message || 'Invalid username or password')
+      }
     }
   }
 
@@ -193,6 +201,7 @@ export default function LoginPage() {
                 <Label htmlFor="password">Password</Label>
                 <button
                   type="button"
+                  onClick={() => toast('Password reset not available yet. Contact administrator.', { icon: '🔒' })}
                   className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Forgot password?

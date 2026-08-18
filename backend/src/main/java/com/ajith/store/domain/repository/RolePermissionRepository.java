@@ -2,9 +2,16 @@ package com.ajith.store.domain.repository;
 
 import com.ajith.store.domain.model.RolePermission;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
     List<RolePermission> findByRole(String role);
+
+    @Modifying
+    @Query("DELETE FROM RolePermission rp WHERE rp.role = :role")
+    void deleteByRole(@Param("role") String role);
 }

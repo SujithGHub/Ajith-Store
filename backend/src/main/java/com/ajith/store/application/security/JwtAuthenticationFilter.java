@@ -29,6 +29,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = extractJwtFromRequest(request);
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                if (jwtTokenProvider.isRefreshToken(jwt)) {
+                    log.warn("Refresh token used as access token, rejecting");
+                    filterChain.doFilter(request, response);
+                    return;
+                }
                 String username = jwtTokenProvider.getUsernameFromToken(jwt);
                 var userDetails = userDetailsService.loadUserByUsername(username);
                 var authentication = new UsernamePasswordAuthenticationToken(

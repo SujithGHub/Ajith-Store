@@ -14,6 +14,9 @@ import SalesPage from './features/sales/SalesPage'
 import BillingPage from './features/sales/BillingPage'
 import ReportsPage from './features/reports/ReportsPage'
 import SettingsPage from './features/settings/SettingsPage'
+import UsersPage from './features/users/UsersPage'
+import RolesPage from './features/roles/RolesPage'
+import MastersPage from './features/masters/MastersPage'
 
 function App() {
   return (
@@ -28,12 +31,15 @@ function App() {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="products/*" element={<ProductsPage />} />
             <Route path="inventory/*" element={<InventoryPage />} />
+            <Route path="masters/*" element={<MastersPage />} />
             <Route path="suppliers/*" element={<SuppliersPage />} />
             <Route path="purchases/*" element={<PurchasesPage />} />
             <Route path="customers/*" element={<CustomersPage />} />
             <Route path="sales" element={<SalesPage />} />
             <Route path="billing" element={<BillingPage />} />
             <Route path="reports/*" element={<ReportsPage />} />
+            <Route path="users/*" element={<UsersPage />} />
+            <Route path="roles" element={<RolesPage />} />
             <Route path="settings/*" element={<SettingsPage />} />
           </Route>
         </Routes>

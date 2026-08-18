@@ -42,6 +42,17 @@ public class User {
     @Column(name = "last_login_ip", length = 45)
     private String lastLoginIp;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean locked = false;
+
+    @Column(name = "failed_login_attempts", nullable = false)
+    @Builder.Default
+    private Integer failedLoginAttempts = 0;
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
