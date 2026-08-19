@@ -12,18 +12,18 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ManufacturerRequest {
 
-    @NotBlank
+    @NotBlank(message = "Manufacturer name is required")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Contact person is required")
     private String contactPerson;
 
-    @NotBlank
+    @NotBlank(message = "Mobile number is required")
     private String mobile;
 
-    @NotBlank
+    @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Address is required")
     private String address;
 }

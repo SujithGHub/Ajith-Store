@@ -46,4 +46,5 @@ public class ProductDto {
     private String status;
 
     private List<VariantDto> variants;
+    private List<ProductImageDto> images;
 }

@@ -6,9 +6,9 @@ import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ChangePasswordRequest {
-    @NotBlank
+    @NotBlank(message = "Current password is required")
     private String currentPassword;
 
-    @NotBlank @ValidPassword
+    @NotBlank(message = "New password is required") @ValidPassword
     private String newPassword;
 }

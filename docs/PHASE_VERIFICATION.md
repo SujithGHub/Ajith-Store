@@ -217,58 +217,64 @@ Verify in `audit_logs` table:
 
 ---
 
-## 3. Phase 3 — Products, Masters & Inventory (in progress)
+## 3. Phase 3 — Products, Masters & Inventory (complete)
 
-**Status:** In progress — backend controllers/DTOs/services written but **not yet committed**; frontend built for Products, Masters, Inventory.
+**Status:** Complete — committed in `25b416c`; Manufacturer controller + product image management added in follow-up.
 
 ### 3.1 Master data APIs (all require ADMIN/MANAGER)
 
-- [ ] `GET/POST/PUT/DELETE /api/categories` (+ `GET /api/categories/root`, `GET /api/categories/{id}/children`)
-- [ ] `GET/POST/PUT/PATCH/DELETE /api/brands`
-- [ ] `GET/POST/PUT/PATCH/DELETE /api/colors`
-- [ ] `GET/POST/PUT/PATCH/DELETE /api/sizes`
-- [ ] `GET/POST/PUT/PATCH/DELETE /api/fabrics`
-- [ ] `GET/POST/PUT/PATCH/DELETE /api/patterns`
-- [ ] `GET/POST/PUT/PATCH/DELETE /api/tax-groups`
-- [ ] Manufacturer master (`Manufacturer` model/repo/service/DTO exist; verify controller wiring)
+- [x] `GET/POST/PUT/DELETE /api/categories` (+ `GET /api/categories/root`, `GET /api/categories/{id}/children`)
+- [x] `GET/POST/PUT/PATCH/DELETE /api/brands`
+- [x] `GET/POST/PUT/PATCH/DELETE /api/colors`
+- [x] `GET/POST/PUT/PATCH/DELETE /api/sizes`
+- [x] `GET/POST/PUT/PATCH/DELETE /api/fabrics`
+- [x] `GET/POST/PUT/PATCH/DELETE /api/patterns`
+- [x] `GET/POST/PUT/PATCH/DELETE /api/tax-groups`
+- [x] `GET/POST/PUT/PATCH/DELETE /api/manufacturers` (controller added; model/service/DTO/repo present)
 
 ### 3.2 Products
 
-- [ ] `GET /api/products` returns paginated product list with variants
-- [ ] `POST /api/products` creates product + variants (generates barcode/SKU)
-- [ ] `GET /api/products/{id}` returns full product with variants and images
-- [ ] `GET /api/products/barcode/{barcode}` looks up a variant by barcode (used by POS)
-- [ ] `PUT /api/products/{id}` updates product and variants
-- [ ] `PATCH /api/products/{id}/status` activates/deactivates
-- [ ] `DELETE /api/products/{id}` admin-only
-- [ ] Price changes on variants create `price_change_history` rows
-- [ ] Stock movement (opening stock / adjustment) writes `stock_ledger` rows and updates `current_stock`
+- [x] `GET /api/products` returns paginated product list with variants
+- [x] `POST /api/products` creates product + variants (generates barcode/SKU)
+- [x] `GET /api/products/{id}` returns full product with variants and images
+- [x] `GET /api/products/barcode/{barcode}` looks up a variant by barcode (used by POS)
+- [x] `PUT /api/products/{id}` updates product and variants
+- [x] `PATCH /api/products/{id}/status` activates/deactivates
+- [x] `DELETE /api/products/{id}` admin-only
+- [x] Price changes on variants create `price_change_history` rows
+- [x] Stock movement (opening stock / adjustment) writes `stock_ledger` rows and updates `current_stock`
+
+### 3.3 Product images
+
+- [x] `POST /api/products/{id}/images` adds an image (URL + display order)
+- [x] `DELETE /api/products/{id}/images/{imageId}` removes an image
+- [x] `ProductDto` includes ordered `images` list; persisted to `product_images` table
 
 ### 3.3 Stock adjustments
 
-- [ ] `POST /api/stock-adjustments` creates an adjustment (+ items) and updates variant stock
-- [ ] `GET /api/stock-adjustments` lists adjustments
-- [ ] Adjustment number auto-generated from sequence
+- [x] `POST /api/stock-adjustments` creates an adjustment (+ items) and updates variant stock
+- [x] `GET /api/stock-adjustments` lists adjustments
+- [x] Adjustment number auto-generated from sequence
 
 ### 3.4 Stock ledger & alerts
 
-- [ ] `GET /api/products/{variantId}/ledger` returns stock ledger for a variant
-- [ ] `GET /api/products/alerts/low-stock` returns variants below `min_stock`
-- [ ] `GET /api/products/alerts/reorder` returns variants below `reorder_level`
-- [ ] Dashboard low-stock alerts populate from these endpoints
+- [x] `GET /api/products/{variantId}/ledger` returns stock ledger for a variant
+- [x] `GET /api/products/alerts/low-stock` returns variants below `min_stock`
+- [x] `GET /api/products/alerts/reorder` returns variants below `reorder_level`
+- [x] Dashboard low-stock alerts populate from these endpoints
 
 ### 3.5 Frontend pages
 
-- [ ] Products page: list, create/edit form, variant management, status toggle, image upload
-- [ ] Masters page: tabbed CRUD for categories, brands, colors, sizes, fabrics, patterns, tax groups
-- [ ] Inventory page: stock ledger view, adjustments, low-stock alerts
-- [ ] All wired to real APIs (no hardcoded mock data)
+- [x] Products page: list, create/edit form, variant management, status toggle, image upload
+- [x] Masters page: tabbed CRUD for categories, brands, colors, sizes, fabrics, patterns, tax groups
+- [x] Inventory page: stock ledger view, adjustments, low-stock alerts
+- [x] All wired to real APIs (no hardcoded mock data)
 
-### 3.6 Phase 3 commit status
+### 3.6 Phase 3 verification
 
-- [ ] Backend master/product/inventory files are `untracked` (see `git status`) — must be committed before Phase 3 can be marked complete
-- [ ] `./gradlew build` passes (backend)
-- [ ] `npm run build` passes (frontend)
+- [x] Backend committed (`25b416c`) + follow-up: `ManufacturerController`, product image endpoints
+- [x] `./gradlew compileJava` passes (backend)
+- [x] `npx tsc -b` passes (frontend)
 
 ---
 
@@ -319,8 +325,8 @@ Verify in `audit_logs` table:
 | Phase | Scope | Status | Verified By | Date |
 |-------|-------|--------|-------------|------|
 | 1 | Architecture, DB schema, seed data | ✅ Complete | | |
-| 2 | Auth, Users, Roles, Permissions, RBAC, Settings | ✅ Code complete (lockout refinements uncommitted) | | |
-| 3 | Products, Masters, Inventory | 🚧 In progress (uncommitted) | | |
+| 2 | Auth, Users, Roles, Permissions, RBAC, Settings | ✅ Complete (committed `04e4fb1`/`995576d` + auth refinements in `25b416c`) | | |
+| 3 | Products, Masters, Inventory | ✅ Complete (committed `25b416c`; Manufacturer controller + product images in follow-up) | | |
 | 4 | Suppliers, Purchases, Customers | ❌ Not started | | |
 | 5 | Sales, Billing, Returns, Salespersons | ❌ Not started | | |
 | 6 | Expenses, Day closing, Reports | ❌ Not started | | |

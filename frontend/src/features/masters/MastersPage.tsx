@@ -44,13 +44,13 @@ interface TabConfig {
 }
 
 const tabs: TabConfig[] = [
-  { key: 'categories', label: 'Categories', icon: Tags, endpoint: '/api/categories' },
-  { key: 'brands', label: 'Brands', icon: Building2, endpoint: '/api/brands' },
-  { key: 'colors', label: 'Colors', icon: Palette, endpoint: '/api/colors' },
-  { key: 'sizes', label: 'Sizes', icon: Maximize2, endpoint: '/api/sizes' },
-  { key: 'fabrics', label: 'Fabrics', icon: Shirt, endpoint: '/api/fabrics' },
-  { key: 'patterns', label: 'Patterns', icon: Layout, endpoint: '/api/patterns' },
-  { key: 'tax-groups', label: 'Tax Groups', icon: Percent, endpoint: '/api/tax-groups' },
+  { key: 'categories', label: 'Categories', icon: Tags, endpoint: '/categories' },
+  { key: 'brands', label: 'Brands', icon: Building2, endpoint: '/brands' },
+  { key: 'colors', label: 'Colors', icon: Palette, endpoint: '/colors' },
+  { key: 'sizes', label: 'Sizes', icon: Maximize2, endpoint: '/sizes' },
+  { key: 'fabrics', label: 'Fabrics', icon: Shirt, endpoint: '/fabrics' },
+  { key: 'patterns', label: 'Patterns', icon: Layout, endpoint: '/patterns' },
+  { key: 'tax-groups', label: 'Tax Groups', icon: Percent, endpoint: '/tax-groups' },
 ]
 
 type Entity = Category | Brand | Color | Size | FabricType | Pattern | TaxGroup
@@ -176,7 +176,7 @@ export default function MastersPage() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const { data: res } = await api.get<{ success: boolean; data: Category[] }>('/api/categories/root')
+      const { data: res } = await api.get<{ success: boolean; data: Category[] }>('/categories/root')
       setCategories(res.data || [])
     } catch {
       // silent

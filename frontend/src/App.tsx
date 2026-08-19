@@ -6,6 +6,7 @@ import AuthLayout from './layouts/AuthLayout'
 import LoginPage from './features/auth/LoginPage'
 import DashboardPage from './features/dashboard/DashboardPage'
 import ProductsPage from './features/products/ProductsPage'
+import ProductFormPage from './features/products/ProductFormPage'
 import InventoryPage from './features/inventory/InventoryPage'
 import SuppliersPage from './features/suppliers/SuppliersPage'
 import PurchasesPage from './features/purchases/PurchasesPage'
@@ -29,7 +30,9 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="products/*" element={<ProductsPage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="products/new" element={<ProductFormPage />} />
+            <Route path="products/edit/:id" element={<ProductFormPage />} />
             <Route path="inventory/*" element={<InventoryPage />} />
             <Route path="masters/*" element={<MastersPage />} />
             <Route path="suppliers/*" element={<SuppliersPage />} />

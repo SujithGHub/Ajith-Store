@@ -6,17 +6,17 @@ import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class PermissionUpdateRequest {
-    @NotBlank
+    @NotBlank(message = "Role is required")
     private String role;
 
     private List<PermissionEntry> permissions;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     public static class PermissionEntry {
-        @NotBlank
+        @NotBlank(message = "Module is required")
         private String module;
 
-        @NotBlank
+        @NotBlank(message = "Feature is required")
         private String feature;
 
         private boolean canCreate;

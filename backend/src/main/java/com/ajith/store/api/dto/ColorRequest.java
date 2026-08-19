@@ -12,9 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ColorRequest {
 
-    @NotBlank
+    @NotBlank(message = "Color name is required")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "HEX code is required")
     private String hexCode;
 }

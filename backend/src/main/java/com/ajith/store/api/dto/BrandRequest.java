@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BrandRequest {
 
-    @NotBlank
+    @NotBlank(message = "Brand name is required")
     private String name;
 
     private String description;

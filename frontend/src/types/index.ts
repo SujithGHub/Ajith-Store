@@ -195,10 +195,10 @@ export interface PurchaseOrder {
 export interface PurchaseOrderItem {
   id: number
   variantId: number
+  variantName: string
   barcode: string
-  productName: string
-  color: string
-  size: string
+  colorName: string
+  sizeName: string
   quantity: number
   unitPrice: number
   discountAmount: number
@@ -418,4 +418,108 @@ export interface RolePermission {
   canRead: boolean
   canUpdate: boolean
   canDelete: boolean
+}
+
+export interface SupplierTransaction {
+  id: number
+  supplierId: number
+  supplierName: string
+  transactionType: string
+  amount: number
+  referenceType: string
+  referenceId: number
+  notes: string
+  transactionDate: string
+}
+
+export interface CustomerTransaction {
+  id: number
+  customerId: number
+  customerName: string
+  transactionType: string
+  amount: number
+  referenceType: string
+  referenceId: number
+  notes: string
+  transactionDate: string
+}
+
+export interface GrnItem {
+  id: number
+  variantId: number
+  variantName: string
+  barcode: string
+  colorName: string
+  sizeName: string
+  orderedQty: number
+  receivedQty: number
+  acceptedQty: number
+  rejectedQty: number
+  rejectionReason: string
+}
+
+export interface Grn {
+  id: number
+  grnNumber: string
+  purchaseOrderId: number
+  purchaseOrderNumber: string
+  supplierId: number
+  supplierName: string
+  receivedDate: string
+  status: string
+  notes: string
+  createdBy: number
+  createdAt: string
+  items: GrnItem[]
+}
+
+export interface PurchaseInvoice {
+  id: number
+  invoiceNumber: string
+  supplierId: number
+  supplierName: string
+  purchaseOrderId: number
+  purchaseOrderNumber: string
+  invoiceDate: string
+  dueDate: string
+  subtotal: number
+  discountAmount: number
+  taxAmount: number
+  totalAmount: number
+  paidAmount: number
+  balanceAmount: number
+  status: string
+  notes: string
+  createdBy: number
+  createdAt: string
+}
+
+export interface PurchaseReturnItem {
+  id: number
+  variantId: number
+  variantName: string
+  barcode: string
+  colorName: string
+  sizeName: string
+  quantity: number
+  unitPrice: number
+  reason: string
+}
+
+export interface PurchaseReturn {
+  id: number
+  returnNumber: string
+  supplierId: number
+  supplierName: string
+  purchaseInvoiceId: number
+  purchaseInvoiceNumber: string
+  returnDate: string
+  reason: string
+  subtotal: number
+  taxAmount: number
+  totalAmount: number
+  status: string
+  createdBy: number
+  createdAt: string
+  items: PurchaseReturnItem[]
 }

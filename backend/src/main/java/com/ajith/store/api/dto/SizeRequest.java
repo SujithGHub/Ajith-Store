@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SizeRequest {
 
-    @NotBlank
+    @NotBlank(message = "Size name is required")
     private String name;
 
     private Integer displayOrder;

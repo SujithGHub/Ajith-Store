@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatternRequest {
 
-    @NotBlank
+    @NotBlank(message = "Pattern name is required")
     private String name;
 
     private String description;

@@ -31,7 +31,16 @@ public class ProductService {
     private final ColorRepository colorRepository;
     private final SizeRepository sizeRepository;
     private final PriceChangeHistoryRepository priceChangeHistoryRepository;
+    private final ProductImageRepository productImageRepository;
     private final StockLedgerService stockLedgerService;
+
+    @Transactional(readOnly = true)
+    public List<VariantDto> getAllActiveVariants() {
+        return productVariantRepository
+            .findByStatus("ACTIVE", PageRequest.of(0, 1000)).getContent().stream()
+            .map(this::toVariantDto)
+            .toList();
+    }
 
     @Transactional(readOnly = true)
     public PagedResponse<ProductListDto> getProducts(int page, int size, String search) {
@@ -228,6 +237,32 @@ public class ProductService {
         return stockLedgerService.getLedgerByVariant(variantId, pageable);
     }
 
+    @Transactional
+    public ProductDto addImage(Long productId, String imageUrl, Integer displayOrder) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+
+        ProductImage image = ProductImage.builder()
+            .product(product)
+            .imageUrl(imageUrl)
+            .displayOrder(displayOrder != null ? displayOrder : product.getImages().size())
+            .build();
+        productImageRepository.save(image);
+        return toFullDto(productRepository.findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId)));
+    }
+
+    @Transactional
+    public ProductDto removeImage(Long productId, Long imageId) {
+        productRepository.findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+        ProductImage image = productImageRepository.findById(imageId)
+            .orElseThrow(() -> new EntityNotFoundException("Image not found with id: " + imageId));
+        productImageRepository.delete(image);
+        return toFullDto(productRepository.findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId)));
+    }
+
     private void setProductReferences(Product product, ProductRequest request) {
         if (request.getCategoryId() != null) {
             product.setCategory(categoryRepository.findById(request.getCategoryId())
@@ -355,6 +390,10 @@ public class ProductService {
         List<VariantDto> variantDtos = product.getVariants().stream()
             .map(this::toVariantDto)
             .toList();
+        List<ProductImageDto> imageDtos = product.getImages().stream()
+            .sorted(Comparator.comparing(ProductImage::getDisplayOrder))
+            .map(this::toImageDto)
+            .toList();
         return ProductDto.builder()
             .id(product.getId())
             .name(product.getName())
@@ -385,6 +424,16 @@ public class ProductService {
             .imagePath(product.getImagePath())
             .status(product.getStatus())
             .variants(variantDtos)
+            .images(imageDtos)
+            .build();
+    }
+
+    private ProductImageDto toImageDto(ProductImage image) {
+        return ProductImageDto.builder()
+            .id(image.getId())
+            .imageUrl(image.getImageUrl())
+            .displayOrder(image.getDisplayOrder())
+            .createdAt(image.getCreatedAt())
             .build();
     }
 

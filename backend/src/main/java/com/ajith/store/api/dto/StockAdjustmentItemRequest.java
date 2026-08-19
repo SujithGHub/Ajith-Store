@@ -14,10 +14,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StockAdjustmentItemRequest {
 
-    @NotNull
+    @NotNull(message = "Variant is required")
     private Long variantId;
 
-    @NotNull
+    @NotNull(message = "Quantity is required")
     private BigDecimal quantity;
 
     private BigDecimal unitPrice;

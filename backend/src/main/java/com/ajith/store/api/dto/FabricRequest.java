@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FabricRequest {
 
-    @NotBlank
+    @NotBlank(message = "Fabric name is required")
     private String name;
 
     private String description;

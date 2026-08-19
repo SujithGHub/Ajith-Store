@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class StoreConfigRequest {
-    @NotBlank
+    @NotBlank(message = "Store name is required")
     private String storeName;
     private String address;
     private String phone;

@@ -15,15 +15,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TaxGroupRequest {
 
-    @NotBlank
+    @NotBlank(message = "Tax group name is required")
     private String name;
 
-    @NotNull
+    @NotNull(message = "CGST percentage is required")
     private BigDecimal cgstPct;
 
-    @NotNull
+    @NotNull(message = "SGST percentage is required")
     private BigDecimal sgstPct;
 
-    @NotNull
+    @NotNull(message = "IGST percentage is required")
     private BigDecimal igstPct;
 }

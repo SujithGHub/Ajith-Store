@@ -15,15 +15,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductRequest {
 
-    @NotBlank
+    @NotBlank(message = "Product name is required")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Item code is required")
     private String itemCode;
 
     private String description;
 
-    @NotNull
+    @NotNull(message = "Category is required")
     private Long categoryId;
 
     private Long subcategoryId;

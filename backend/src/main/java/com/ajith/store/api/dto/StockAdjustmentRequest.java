@@ -16,13 +16,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StockAdjustmentRequest {
 
-    @NotBlank
+    @NotBlank(message = "Adjustment type is required")
     private String adjustmentType;
 
     private String reason;
     private String notes;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Items are required")
+    @NotEmpty(message = "At least one adjustment item is required")
     private List<StockAdjustmentItemRequest> items;
 }

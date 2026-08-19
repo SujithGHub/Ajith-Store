@@ -18,10 +18,10 @@ public class VariantRequest {
     private Long colorId;
     private Long sizeId;
 
-    @NotBlank
+    @NotBlank(message = "Barcode is required")
     private String barcode;
 
-    @NotBlank
+    @NotBlank(message = "SKU is required")
     private String sku;
 
     private BigDecimal purchasePrice;

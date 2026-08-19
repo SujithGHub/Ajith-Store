@@ -26,6 +26,11 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(productService.getProducts(page, size, search)));
     }
 
+    @GetMapping("/variants")
+    public ResponseEntity<ApiResponse<List<VariantDto>>> getAllActiveVariants() {
+        return ResponseEntity.ok(ApiResponse.success(productService.getAllActiveVariants()));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductDto>> getProduct(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(productService.getProduct(id)));
@@ -76,5 +81,19 @@ public class ProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ResponseEntity.ok(ApiResponse.success(productService.getVariantLedger(variantId, page, size)));
+    }
+
+    @PostMapping("/{id}/images")
+    public ResponseEntity<ApiResponse<ProductDto>> addImage(@PathVariable Long id,
+            @RequestParam String imageUrl,
+            @RequestParam(required = false) Integer displayOrder) {
+        return ResponseEntity.ok(ApiResponse.success("Image added successfully",
+            productService.addImage(id, imageUrl, displayOrder)));
+    }
+
+    @DeleteMapping("/{id}/images/{imageId}")
+    public ResponseEntity<ApiResponse<ProductDto>> removeImage(@PathVariable Long id, @PathVariable Long imageId) {
+        return ResponseEntity.ok(ApiResponse.success("Image removed successfully",
+            productService.removeImage(id, imageId)));
     }
 }
